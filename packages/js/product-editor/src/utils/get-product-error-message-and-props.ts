@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { getNewPath, navigateTo } from '@woocommerce/navigation';
 
 export type WPErrorCode =
 	| 'variable_product_no_variation_prices'
@@ -20,9 +21,28 @@ export type WPError = {
 	productType?: string;
 };
 
+type ErrorAction = {
+	label: string;
+	onClick: () => void;
+};
+
 type ErrorProps = {
 	explicitDismiss: boolean;
+	actions?: ErrorAction[];
 };
+
+function generateUrl( tab: string ): string {
+	return getNewPath( { tab } );
+}
+
+function getActions( url: string ): ErrorAction[] {
+	return [
+		{
+			label: 'View error',
+			onClick: () => navigateTo( { url } ),
+		},
+	];
+}
 
 export function getProductErrorMessageAndProps(
 	error: WPError,
@@ -38,8 +58,14 @@ export function getProductErrorMessageAndProps(
 	switch ( error.code ) {
 		case 'variable_product_no_variation_prices':
 			response.message = error.message;
-			if ( visibleTab !== 'variations' ) {
-				response.errorProps = { explicitDismiss: true };
+			if (
+				visibleTab !== 'variations' &&
+				error.productType !== 'product_variation'
+			) {
+				response.errorProps = {
+					explicitDismiss: true,
+					actions: getActions( generateUrl( 'variations' ) ),
+				};
 			}
 			break;
 		case 'product_form_field_error':
@@ -48,12 +74,18 @@ export function getProductErrorMessageAndProps(
 				error.productType === 'product_variation' &&
 				visibleTab !== 'pricing'
 			) {
-				response.errorProps = { explicitDismiss: true };
+				response.errorProps = {
+					explicitDismiss: true,
+					actions: getActions( generateUrl( 'pricing' ) ),
+				};
 			} else if (
 				visibleTab !== 'general' &&
 				error.productType !== 'product_variation'
 			) {
-				response.errorProps = { explicitDismiss: true };
+				response.errorProps = {
+					explicitDismiss: true,
+					actions: getActions( generateUrl( 'general' ) ),
+				};
 			}
 			break;
 		case 'product_invalid_sku':
@@ -62,7 +94,10 @@ export function getProductErrorMessageAndProps(
 				'woocommerce'
 			);
 			if ( visibleTab !== 'inventory' ) {
-				response.errorProps = { explicitDismiss: true };
+				response.errorProps = {
+					explicitDismiss: true,
+					actions: getActions( generateUrl( 'inventory' ) ),
+				};
 			}
 			break;
 		case 'product_create_error':
