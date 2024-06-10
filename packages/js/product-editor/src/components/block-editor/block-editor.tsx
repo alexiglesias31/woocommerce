@@ -17,6 +17,7 @@ import { __ } from '@wordpress/i18n';
 import { useLayoutTemplate } from '@woocommerce/block-templates';
 import { store as keyboardShortcutsStore } from '@wordpress/keyboard-shortcuts';
 import { Product } from '@woocommerce/data';
+import { getHistory, getQuery } from '@woocommerce/navigation';
 import {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore No types for this exist yet.
@@ -92,6 +93,10 @@ export function BlockEditor( {
 	>( null );
 
 	useConfirmUnsavedProductChanges( postType );
+
+	const { section } = getQuery() as { section?: string };
+	const { __experimentalLocationStack: locationStack, location } =
+		getHistory();
 
 	/**
 	 * Fire wp-pin-menu event once to trigger the pinning of the menu.
@@ -302,6 +307,25 @@ export function BlockEditor( {
 	useEffect( () => {
 		setIsEditorLoading( isEditorLoading );
 	}, [ isEditorLoading ] );
+
+	useEffect( () => {
+		const visitCount = locationStack.filter(
+			( pastLocation ) => pastLocation.search === location.search
+		).length;
+		const hasVisited = visitCount > 1;
+		if ( section && ! hasVisited ) {
+			const elements = document.querySelectorAll(
+				'[data-template-block-id]'
+			);
+			for ( const element of elements ) {
+				if (
+					element.getAttribute( 'data-template-block-id' ) === section
+				) {
+					element.scrollIntoView( { behavior: 'smooth' } );
+				}
+			}
+		}
+	}, [ blocks, isEditorLoading, section ] );
 
 	// Check if the Modal editor is open from the store.
 	const isModalEditorOpen = useSelect( ( selectCore ) => {

@@ -31,8 +31,9 @@ type ErrorProps = {
 	actions?: ErrorAction[];
 };
 
-function generateUrl( tab: string ): string {
-	return getNewPath( { tab } );
+function generateUrl( tab = 'general', section?: string ): string {
+	const props = section ? { tab, section } : { tab };
+	return getNewPath( props );
 }
 
 function getActions( url: string ): ErrorAction[] {
@@ -64,7 +65,9 @@ export function getProductErrorMessageAndProps(
 			) {
 				response.errorProps = {
 					explicitDismiss: true,
-					actions: getActions( generateUrl( 'variations' ) ),
+					actions: getActions(
+						generateUrl( 'variations', 'product-variation-section' )
+					),
 				};
 			}
 			break;
@@ -76,7 +79,9 @@ export function getProductErrorMessageAndProps(
 			) {
 				response.errorProps = {
 					explicitDismiss: true,
-					actions: getActions( generateUrl( 'pricing' ) ),
+					actions: getActions(
+						generateUrl( 'pricing', 'product-pricing-section' )
+					),
 				};
 			} else if (
 				visibleTab !== 'general' &&
@@ -84,7 +89,9 @@ export function getProductErrorMessageAndProps(
 			) {
 				response.errorProps = {
 					explicitDismiss: true,
-					actions: getActions( generateUrl( 'general' ) ),
+					actions: getActions(
+						generateUrl( 'general', 'product-general-section' )
+					),
 				};
 			}
 			break;
