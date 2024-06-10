@@ -90,7 +90,7 @@ export function getProductErrorMessageAndProps(
 				response.errorProps = {
 					explicitDismiss: true,
 					actions: getActions(
-						generateUrl( 'general', 'product-general-section' )
+						generateUrl( 'general', 'basic-details' )
 					),
 				};
 			}
@@ -103,7 +103,9 @@ export function getProductErrorMessageAndProps(
 			if ( visibleTab !== 'inventory' ) {
 				response.errorProps = {
 					explicitDismiss: true,
-					actions: getActions( generateUrl( 'inventory' ) ),
+					actions: getActions(
+						generateUrl( 'inventory', 'product-inventory-section' )
+					),
 				};
 			}
 			break;
