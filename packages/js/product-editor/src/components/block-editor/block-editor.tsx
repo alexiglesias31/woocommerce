@@ -94,9 +94,8 @@ export function BlockEditor( {
 
 	useConfirmUnsavedProductChanges( postType );
 
-	const { section } = getQuery() as { section?: string };
-	const { __experimentalLocationStack: locationStack, location } =
-		getHistory();
+	const { block_id: blockId } = getQuery() as { block_id?: string };
+	const { location, replace: replaceHistory } = getHistory();
 
 	/**
 	 * Fire wp-pin-menu event once to trigger the pinning of the menu.
@@ -309,23 +308,47 @@ export function BlockEditor( {
 	}, [ isEditorLoading ] );
 
 	useEffect( () => {
-		const visitCount = locationStack.filter(
-			( pastLocation ) => pastLocation.search === location.search
-		).length;
-		const hasVisited = visitCount > 1;
-		if ( section && ! hasVisited ) {
+		if ( blockId ) {
 			const elements = document.querySelectorAll(
 				'[data-template-block-id]'
 			);
 			for ( const element of elements ) {
 				if (
-					element.getAttribute( 'data-template-block-id' ) === section
+					element.getAttribute( 'data-template-block-id' ) === blockId
 				) {
-					element.scrollIntoView( { behavior: 'smooth' } );
+					const container = document.querySelector(
+						'.interface-interface-skeleton__content'
+					) as HTMLElement;
+					const headerElement = document.querySelector(
+						'.woocommerce-product-header'
+					) as HTMLElement;
+					const adminBarElement = document.querySelector(
+						'#wpadminbar'
+					) as HTMLElement;
+
+					const headerHeight = headerElement?.offsetHeight || 0;
+					const adminBarHeight = adminBarElement?.offsetHeight || 0;
+
+					const elementTop = element.getBoundingClientRect().top;
+
+					const scrollToPosition =
+						elementTop - ( headerHeight + adminBarHeight );
+
+					container.scrollTo( {
+						top: scrollToPosition,
+						behavior: 'smooth',
+					} );
+
+					const urlSearchParams = new URLSearchParams(
+						location.search
+					);
+					urlSearchParams.delete( 'block_id' );
+					replaceHistory( { search: urlSearchParams.toString() } );
+					break;
 				}
 			}
 		}
-	}, [ blocks, isEditorLoading, section ] );
+	}, [ blocks, isEditorLoading ] );
 
 	// Check if the Modal editor is open from the store.
 	const isModalEditorOpen = useSelect( ( selectCore ) => {

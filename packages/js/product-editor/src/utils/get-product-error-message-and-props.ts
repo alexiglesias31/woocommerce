@@ -31,8 +31,8 @@ type ErrorProps = {
 	actions?: ErrorAction[];
 };
 
-function generateUrl( tab = 'general', section?: string ): string {
-	const props = section ? { tab, section } : { tab };
+function generateUrl( tab = 'general', block_id?: string ): string {
+	const props = block_id ? { tab, block_id } : { tab };
 	return getNewPath( props );
 }
 
