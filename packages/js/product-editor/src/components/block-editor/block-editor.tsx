@@ -307,6 +307,28 @@ export function BlockEditor( {
 		setIsEditorLoading( isEditorLoading );
 	}, [ isEditorLoading ] );
 
+	function getScrollPosition( element: HTMLElement ) {
+		const headerElement = document.querySelector(
+			'.woocommerce-product-header'
+		) as HTMLElement;
+		const adminBarElement = document.querySelector(
+			'#wpadminbar'
+		) as HTMLElement;
+
+		const headerHeight = headerElement?.offsetHeight || 0;
+		const adminBarHeight = adminBarElement?.offsetHeight || 0;
+
+		const elementTop = element.getBoundingClientRect().top;
+
+		return elementTop - headerHeight - adminBarHeight;
+	}
+
+	function removeBlockIdFromUrl() {
+		const urlSearchParams = new URLSearchParams( location.search );
+		urlSearchParams.delete( 'block_id' );
+		replaceHistory( { search: urlSearchParams.toString() } );
+	}
+
 	useEffect( () => {
 		if ( blockId ) {
 			const elements = document.querySelectorAll(
@@ -319,31 +341,12 @@ export function BlockEditor( {
 					const container = document.querySelector(
 						'.interface-interface-skeleton__content'
 					) as HTMLElement;
-					const headerElement = document.querySelector(
-						'.woocommerce-product-header'
-					) as HTMLElement;
-					const adminBarElement = document.querySelector(
-						'#wpadminbar'
-					) as HTMLElement;
-
-					const headerHeight = headerElement?.offsetHeight || 0;
-					const adminBarHeight = adminBarElement?.offsetHeight || 0;
-
-					const elementTop = element.getBoundingClientRect().top;
-
-					const scrollToPosition =
-						elementTop - ( headerHeight + adminBarHeight );
-
 					container.scrollTo( {
-						top: scrollToPosition,
+						top: getScrollPosition( element as HTMLElement ),
 						behavior: 'smooth',
 					} );
 
-					const urlSearchParams = new URLSearchParams(
-						location.search
-					);
-					urlSearchParams.delete( 'block_id' );
-					replaceHistory( { search: urlSearchParams.toString() } );
+					removeBlockIdFromUrl();
 					break;
 				}
 			}
