@@ -189,7 +189,11 @@ export function ProductDetailsSectionDescriptionBlockEdit( {
 				} );
 			} catch ( error ) {
 				const { message, errorProps } = getProductErrorMessageAndProps(
-					errorHandler( error as WPError, productStatus ) as WPError,
+					errorHandler(
+						error as WPError,
+						productStatus,
+						postType
+					) as WPError,
 					selectedTab
 				);
 				createErrorNotice( message, errorProps );
@@ -307,7 +311,11 @@ export function ProductDetailsSectionDescriptionBlockEdit( {
 			window.location.href = getNewPath( {}, `/product/${ productId }` );
 		} catch ( error ) {
 			const { message, errorProps } = getProductErrorMessageAndProps(
-				errorHandler( error as WPError, productStatus ) as WPError,
+				errorHandler(
+					error as WPError,
+					productStatus,
+					postType
+				) as WPError,
 				selectedTab
 			);
 			createErrorNotice( message, errorProps );
