@@ -59,10 +59,7 @@ export function getProductErrorMessageAndProps(
 	switch ( error.code ) {
 		case 'variable_product_no_variation_prices':
 			response.message = error.message;
-			if (
-				visibleTab !== 'variations' &&
-				error.productType !== 'product_variation'
-			) {
+			if ( visibleTab !== 'variations' ) {
 				response.errorProps = {
 					explicitDismiss: true,
 					actions: getActions(
@@ -73,24 +70,16 @@ export function getProductErrorMessageAndProps(
 			break;
 		case 'product_form_field_error':
 			response.message = error.message;
-			if (
-				error.productType === 'product_variation' &&
-				visibleTab !== 'pricing'
-			) {
+			if ( visibleTab !== 'general' ) {
 				response.errorProps = {
 					explicitDismiss: true,
 					actions: getActions(
-						generateUrl( 'pricing', 'product-pricing-section' )
-					),
-				};
-			} else if (
-				visibleTab !== 'general' &&
-				error.productType !== 'product_variation'
-			) {
-				response.errorProps = {
-					explicitDismiss: true,
-					actions: getActions(
-						generateUrl( 'general', 'basic-details' )
+						generateUrl(
+							'general',
+							error.productType === 'product_variation'
+								? 'product-variation-details-section'
+								: 'basic-details'
+						)
 					),
 				};
 			}
@@ -104,7 +93,12 @@ export function getProductErrorMessageAndProps(
 				response.errorProps = {
 					explicitDismiss: true,
 					actions: getActions(
-						generateUrl( 'inventory', 'product-inventory-section' )
+						generateUrl(
+							'inventory',
+							error.productType === 'product_variation'
+								? 'product-variation-inventory-section'
+								: 'product-inventory-section'
+						)
 					),
 				};
 			}
