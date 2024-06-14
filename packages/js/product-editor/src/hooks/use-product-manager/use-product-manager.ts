@@ -114,7 +114,6 @@ export function useProductManager< T = Product >( postType: string ) {
 
 			return savedProduct as T;
 		} catch ( error ) {
-			console.log( 'error save - postType', postType );
 			throw errorHandler( error as WPError, status, postType );
 		} finally {
 			setIsSaving( false );
