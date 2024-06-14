@@ -19,13 +19,14 @@ export function errorHandler(
 	productType: string
 ) {
 	if ( error.code ) {
-		return error;
+		return { ...error, productType };
 	}
 
 	if ( 'variations' in error && error.variations ) {
 		return {
 			code: 'variable_product_no_variation_prices',
 			message: error.variations,
+			productType,
 		};
 	}
 
@@ -113,6 +114,7 @@ export function useProductManager< T = Product >( postType: string ) {
 
 			return savedProduct as T;
 		} catch ( error ) {
+			console.log( 'error save - postType', postType );
 			throw errorHandler( error as WPError, status, postType );
 		} finally {
 			setIsSaving( false );
