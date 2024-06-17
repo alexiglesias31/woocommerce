@@ -5166,6 +5166,10 @@ img.help_tip {
 			float: none;
 		}
 
+		tr.disabled td {
+			opacity: 0.5;
+		}
+
 		fieldset {
 			margin-top: 4px;
 
