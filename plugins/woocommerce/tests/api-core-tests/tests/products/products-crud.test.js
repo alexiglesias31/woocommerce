@@ -717,12 +717,7 @@ test.describe( 'Products API tests: CRUD', () => {
 			const getDeletedProductReviewResponse = await request.get(
 				`wp-json/wc/v3/products/reviews/${ productReviewId }`
 			);
-			/**
-			 *  currently returns a 403 (forbidden) rather than a 404 (not found)
-			 *  an issue has been raised to track this
-			 *  See: https://github.com/woocommerce/woocommerce/issues/35162
-			 */
-			expect( getDeletedProductReviewResponse.status() ).toEqual( 403 );
+			expect( getDeletedProductReviewResponse.status() ).toEqual( 404 );
 		} );
 
 		test( 'can batch update product reviews', async ( { request } ) => {
@@ -817,12 +812,7 @@ test.describe( 'Products API tests: CRUD', () => {
 			const getDeletedProductReviewResponse = await request.get(
 				`wp-json/wc/v3/products/reviews/${ review2Id }`
 			);
-			/**
-			 *  currently returns a 403 (forbidden) rather than a 404 (not found)
-			 *  an issue has been raised to track this
-			 *  See: https://github.com/woocommerce/woocommerce/issues/35162
-			 */
-			expect( getDeletedProductReviewResponse.status() ).toEqual( 403 );
+			expect( getDeletedProductReviewResponse.status() ).toEqual( 404 );
 
 			// Batch delete the created tags
 			await request.post( `wp-json/wc/v3/products/reviews/batch`, {
