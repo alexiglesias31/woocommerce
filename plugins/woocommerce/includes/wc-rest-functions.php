@@ -349,13 +349,12 @@ function wc_rest_check_product_reviews_permissions( $context = 'read', $object_i
 		'batch'  => 'edit_products',
 	);
 
-	if ( $object_id > 0 ) {
-		$object = get_comment( $object_id );
+	// 	$object = get_comment( $object_id );
 
-		if ( ! is_a( $object, 'WP_Comment' ) || get_comment_type( $object ) !== 'review' ) {
-			return false;
-		}
-	}
+	// 	if ( ! is_a( $object, 'WP_Comment' ) || get_comment_type( $object ) !== 'review' ) {
+	// 		return false;
+	// 	}
+	// }
 
 	if ( isset( $contexts[ $context ] ) ) {
 		$permission = current_user_can( $contexts[ $context ], $object_id );
