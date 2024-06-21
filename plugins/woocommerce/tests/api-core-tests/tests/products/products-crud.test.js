@@ -1,6 +1,6 @@
 const { test, expect } = require( '@playwright/test' );
 const { API_BASE_URL } = process.env;
-const shouldSkip = API_BASE_URL != undefined;
+const shouldSkip = API_BASE_URL !== undefined;
 
 /**
  * Internal dependencies
@@ -1524,7 +1524,7 @@ test.describe( 'Products API tests: CRUD', () => {
 			// Send request to batch delete the products created earlier
 			const idsToDelete = expectedProducts.map( ( { id } ) => id );
 			const batchDeletePayload = batch( 'delete', idsToDelete );
-			const response = await request.post(
+			let response = await request.post(
 				'wp-json/wc/v3/products/batch',
 				{
 					data: batchDeletePayload,
@@ -1546,7 +1546,7 @@ test.describe( 'Products API tests: CRUD', () => {
 
 			// Verify that the deleted product ID's can no longer be retrieved
 			for ( const id of idsToDelete ) {
-				const response = await request.get(
+				response = await request.get(
 					`wp-json/wc/v3/products/${ id }`
 				);
 				expect( response.status() ).toEqual( 404 );
