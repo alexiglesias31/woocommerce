@@ -349,13 +349,6 @@ function wc_rest_check_product_reviews_permissions( $context = 'read', $object_i
 		'batch'  => 'edit_products',
 	);
 
-	// 	$object = get_comment( $object_id );
-
-	// 	if ( ! is_a( $object, 'WP_Comment' ) || get_comment_type( $object ) !== 'review' ) {
-	// 		return false;
-	// 	}
-	// }
-
 	if ( isset( $contexts[ $context ] ) ) {
 		$permission = current_user_can( $contexts[ $context ], $object_id );
 	}
