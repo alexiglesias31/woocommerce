@@ -387,6 +387,10 @@ class WC_REST_Product_Reviews_V1_Controller extends WC_REST_Controller {
 		$product_review    = $this->get_review_for_product( $product_review_id, $product_id );
 		$force             = isset( $request['force'] ) ? (bool) $request['force'] : false;
 
+		if ( is_wp_error( $product_review ) ) {
+			return $product_review;
+		}
+
 		/**
 		 * Filter whether a product review is trashable.
 		 *
