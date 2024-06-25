@@ -1524,12 +1524,9 @@ test.describe( 'Products API tests: CRUD', () => {
 			// Send request to batch delete the products created earlier
 			const idsToDelete = expectedProducts.map( ( { id } ) => id );
 			const batchDeletePayload = batch( 'delete', idsToDelete );
-			let response = await request.post(
-				'wp-json/wc/v3/products/batch',
-				{
-					data: batchDeletePayload,
-				}
-			);
+			let response = await request.post( 'wp-json/wc/v3/products/batch', {
+				data: batchDeletePayload,
+			} );
 			const responseJSON = await response.json();
 			const actualBatchDeletedProducts = responseJSON.delete;
 
