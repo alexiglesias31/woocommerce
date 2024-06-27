@@ -202,7 +202,6 @@ class DataStore extends ReportsDataStore implements DataStoreInterface {
 
 			$this->subquery->clear_sql_clause( 'select' );
 			$this->subquery->add_sql_clause( 'select', $this->selected_columns( $query_args ) );
-			$this->subquery->add_sql_clause( 'group_by', ", {$wpdb->prefix}woocommerce_order_items.order_item_name, {$wpdb->prefix}woocommerce_order_itemmeta.meta_value" );
 			$this->subquery->add_sql_clause( 'order_by', $this->get_sql_clause( 'order_by' ) );
 
 			$taxes_query = $this->subquery->get_query_statement();
